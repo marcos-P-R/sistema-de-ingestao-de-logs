@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: ./service-api-ingestor
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    networks:
+      - logs-network
+
+networks:
+  logs-network:
+    driver: bridge
