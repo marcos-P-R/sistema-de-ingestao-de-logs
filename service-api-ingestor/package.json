@@ -8,7 +8,7 @@
   },
   "keywords": [],
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "author": "Makoto <marcos.p.mcruz@gmail.com>",
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node22": "^22.0.2",
     "@types/node": "^24.1.0",
     "typescript": "^5.8.3"
   }
