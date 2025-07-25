@@ -1,0 +1,28 @@
+{
+  "name": "service-api-ingestor",
+  "version": "0.1.0",
+  "description": "API para ingestão de logs, parte do portfólio profissional.",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "tsx --watch src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "type": "module",
+  "author": "Makoto <marcos.p.mcruz@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcos-P-R/sistema-de-ingestao-de-logs.git"
+  },
+  "dependencies": {
+    "fastify": "^5.4.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^24.1.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
