@@ -1,10 +1,10 @@
-import { Kafka, type Producer } from "@confluentinc/kafka-javascript/types/kafkajs.js"
+import { KafkaJS } from "@confluentinc/kafka-javascript";
 import type { LogDto } from "../../../controller/log.dto.ts";
 
 export class KafkaClient {
   private static instance: KafkaClient
   private buffer: LogDto[] = []
-  private readonly client: Kafka
+  private readonly client: KafkaJS.Kafka
   private readonly SERVER_URL: string = String(process.env.SERVER_URL ?? "");
   private readonly KAFKA_CLIENT_ID: string = String(process.env.KAFKA_CLIENT_ID ?? "");
   private readonly KAFKA_CLIENT_TOPIC: string = String(process.env.KAFKA_CLIENT_TOPIC ?? "");
@@ -14,7 +14,7 @@ export class KafkaClient {
   private readonly FLUSH_INTERVAL_MS = Number(process.env.FLUSH_INTERVAL_MS ?? 2000);
 
   constructor() {
-    this.client = new Kafka({
+    this.client = new KafkaJS.Kafka({
       kafkaJS: {
         clientId: this.KAFKA_CLIENT_ID,
         brokers: [this.SERVER_URL],
@@ -38,7 +38,7 @@ export class KafkaClient {
     return KafkaClient.instance
   }
 
-  private producer(): Producer {
+  private producer() {
     return this.client.producer({
       "enable.idempotence": true,
     });
