@@ -8,3 +8,7 @@ export const app = Fastify({
 
 app.post('/log', { schema: logSchema }, AddLogs);
 
+app.get('/health', async (request, reply) => {
+  reply.send({ status: 'ok' });
+});
+
