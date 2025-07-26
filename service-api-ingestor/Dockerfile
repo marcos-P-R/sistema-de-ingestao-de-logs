@@ -3,10 +3,10 @@ FROM node:22-alpine3.22 AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci  --production 
+RUN npm install
 
 COPY . .
-RUN npm build
+RUN npm run build
 
 
 FROM node:22-alpine3.22
@@ -14,7 +14,7 @@ FROM node:22-alpine3.22
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 
