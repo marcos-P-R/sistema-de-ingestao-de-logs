@@ -8,6 +8,54 @@ services:
     environment:
       - PORT=3005
       - HOST=0.0.0.0
+      - SERVER_URL=broker:29093
+      - KAFKA_CLIENT_ID=api-ingestor
+      - KAFKA_CLIENT_TOPIC=logs
+      - MAX_BATCH_SIZE=20
+      - FLUSH_INTERVAL_MS=2000
+      - API_KEY=admin
+      - API_SECRET=admin-secret
+    networks:
+      - logs-network
+  
+  broker:
+    image: apache/kafka:latest
+    hostname: broker
+    container_name: broker
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,SASL_PLAINTEXT://broker:29093,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://broker:29092,SASL_PLAINTEXT://broker:29093,CONTROLLER://broker:29094,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:29094
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/server-jaas.conf
+    volumes:
+      - ./server-jaas.conf:/etc/kafka/server-jaas.conf
+    networks:
+      - logs-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:29092
     networks:
       - logs-network
 
